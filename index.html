@@ -108,7 +108,7 @@
               var cip = document.cip;
               if (gip && cip) {
               if (nfip === gip && gip === cip) {
-                document.getElementById("stat").innerHTML += `
+                document.getElementById("stat").innerHTML = `
                 <div class="mdui-chip">
   <span class="mdui-chip-icon mdui-color-orange">
     <i class="mdui-icon material-icons">call_merge</i>
@@ -117,16 +117,25 @@
 </div>
                 `;
               } else if (gip === cip) {
-                document.getElementById("stat").innerHTML += `
+                if (nfip === undefined) {
+                  document.getElementById("stat").innerHTML = `
+                <div class="mdui-chip">
+  <span class="mdui-chip-icon mdui-color-grey">
+    <i class="mdui-icon material-icons">call_split</i>
+  </span>
+  <span class="mdui-chip-title">You have most likely configured GLOBAL mode.</span>
+</div>`;
+                } else {
+                document.getElementById("stat").innerHTML = `
                 <div class="mdui-chip">
   <span class="mdui-chip-icon mdui-color-blue">
     <i class="mdui-icon material-icons">call_split</i>
   </span>
   <span class="mdui-chip-title">You have set a particular IP for Netflix.</span>
 </div>
-                `;
-              } else if (gip !== cip && gip !== cip) {
-                document.getElementById("stat").innerHTML += `
+                `;}
+              } else if (gip !== cip && gip !== cip && nfip !== undefined) {
+                document.getElementById("stat").innerHTML = `
                 <div class="mdui-chip">
   <span class="mdui-chip-icon mdui-color-green">
     <i class="mdui-icon material-icons">check</i>
@@ -134,8 +143,8 @@
   <span class="mdui-chip-title">All policies are active.</span>
 </div>
 `;
-              }clearInterval(checkstat);}
-            }, 2000);
+              }}
+            }, 1000);
         </script>
         <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
     </body>
