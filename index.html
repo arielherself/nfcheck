@@ -134,7 +134,8 @@
   <span class="mdui-chip-title">You have set a particular IP for Netflix.</span>
 </div>
                 `;}
-              } else if (gip !== cip && gip !== cip && nfip !== undefined) {
+              } else if (gip !== cip && nfip !== undefined) {
+                if (nfip !== undefined){
                 document.getElementById("stat").innerHTML = `
                 <div class="mdui-chip">
   <span class="mdui-chip-icon mdui-color-green">
@@ -142,7 +143,15 @@
   </span>
   <span class="mdui-chip-title">All policies are active.</span>
 </div>
-`;
+`;} else {
+  document.getElementById("stat").innerHTML = `
+                <div class="mdui-chip">
+  <span class="mdui-chip-icon mdui-color-grey">
+    <i class="mdui-icon material-icons">check</i>
+  </span>
+  <span class="mdui-chip-title">You have most likely configured FILTER mode.co</span>
+</div>
+}
               }}
             }, 1000);
         </script>
