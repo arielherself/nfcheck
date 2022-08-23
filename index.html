@@ -57,6 +57,7 @@
               </tbody>
             </table>
           </div>
+          <div id="stat"></div>
           <h1>Unblocking Check</h1>
           <h2>Steps:</h2>
           <h3>1. Drag the button below to your bookmark bar.</h3>
@@ -76,6 +77,7 @@
                             regioncheck = JSON.parse(json);
                             document.getElementById("region").innerHTML = `${regioncheck.client.location.country} (${regioncheck.client.location.city})`;
                             document.getElementById("ip").innerHTML = `<a href="https://ipinfo.io/${regioncheck.client.ip}">${regioncheck.client.ip}</a> (AS${regioncheck.client.asn} ${regioncheck.client.isp})`;
+                            document.nfip = regioncheck.client.ip;
                         }
                 };
                 var httpRequest1 = new XMLHttpRequest();
@@ -86,6 +88,7 @@
                             var ip = httpRequest1.responseText;
                             var json = JSON.parse(ip);
                             document.getElementById("gip").innerHTML = `<a href="https://ipinfo.io/${json.ip}">${json.ip}</a>`;
+                            document.gip = json.ip;
                         }
                 };
                 var httpRequest2 = new XMLHttpRequest();
@@ -96,9 +99,43 @@
                             var ip = httpRequest2.responseText;
                             ip = ip.slice(ip.indexOf('ip=')+3, ip.slice(ip.indexOf('ip=')+3).indexOf('\n')+3+ip.indexOf('ip='));
                             document.getElementById("cip").innerHTML = `<a href="https://ipinfo.io/${ip}">${ip}</a>`;
+                            document.cip = ip;
                         }
                 };
-
+            checkstat = setInterval(() => {
+              var nfip = document.nfip;
+              var gip = document.gip;
+              var cip = document.cip;
+              if (gip && cip) {
+              if (nfip === gip && gip === cip) {
+                document.getElementById("stat").innerHTML += `
+                <div class="mdui-chip">
+  <span class="mdui-chip-icon mdui-color-orange">
+    <i class="mdui-icon material-icons">call_merge</i>
+  </span>
+  <span class="mdui-chip-title">You have GLOBAL mode enabled.</span>
+</div>
+                `;
+              } else if (gip === cip) {
+                document.getElementById("stat").innerHTML += `
+                <div class="mdui-chip">
+  <span class="mdui-chip-icon mdui-color-blue">
+    <i class="mdui-icon material-icons">call_split</i>
+  </span>
+  <span class="mdui-chip-title">You have set a particular IP for Netflix.</span>
+</div>
+                `;
+              } else if (gip !== cip && gip !== cip) {
+                document.getElementById("stat").innerHTML += `
+                <div class="mdui-chip">
+  <span class="mdui-chip-icon mdui-color-green">
+    <i class="mdui-icon material-icons">check</i>
+  </span>
+  <span class="mdui-chip-title">All policies are active.</span>
+</div>
+`;
+              }clearInterval(checkstat);}
+            }, 2000);
         </script>
         <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
     </body>
