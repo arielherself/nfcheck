@@ -48,6 +48,11 @@
                   <td id="ip"><div><div class="mdui-spinner mdui-spinner-colorful"></div>Use a local version to access this item.</div></td>
                 </tr>
                 <tr>
+                  <td>3</td>
+                  <td>TVBAnywhere IP</td>
+                  <td id="tvbip"><div><div class="mdui-spinner mdui-spinner-colorful"></div>Use a local version to access this item.</div></td>
+                </tr>
+                <tr>
                     <td>3</td>
                     <td>General IP</td>
                     <td id="gip"><div><div class="mdui-spinner mdui-spinner-colorful"></div></div>If it takes longer than expected, turn off your adblock plugins.</td>
@@ -56,6 +61,16 @@
                     <td>4</td>
                     <td>Chinese IP</td>
                     <td id="cip"><div><div class="mdui-spinner mdui-spinner-colorful"></div></div></td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>FOX Unblock</td>
+                    <td id="superip"><div><div class="mdui-spinner mdui-spinner-colorful"></div>Use a local version to access this item.</div></td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>HBO Go Region</td>
+                    <td id="hboreg"><div><div class="mdui-spinner mdui-spinner-colorful"></div>Use a local version to access this item.</div></td>
                   </tr>
               </tbody>
             </table>
@@ -103,6 +118,38 @@
                             ip = ip.slice(ip.indexOf('ip=')+3, ip.slice(ip.indexOf('ip=')+3).indexOf('\n')+3+ip.indexOf('ip='));
                             document.getElementById("cip").innerHTML = `<a href="https://ipinfo.io/${ip}">${ip}</a>`;
                             document.cip = ip;
+                        }
+                };
+                var httpRequest3 = new XMLHttpRequest();
+                httpRequest3.open('GET', "https://x-live-fox-stgec.uplynk.com/ausw/slices/8d1/d8e6eec26bf544f084bad49a7fa2eac5/8d1de292bcc943a6b886d029e6c0dc87/G00000000.ts?pbs=c61e60ee63ce43359679fb9f65d21564&cloud=aws&si=0", true);
+                httpRequest3.send();
+                httpRequest3.onreadystatechange = function () {
+                        if (httpRequest3.readyState == 4 && (httpRequest3.status == 200 || httpRequest3.status ==301)) {
+                            document.getElementById("superip").innerHTML = `Yes`;
+                        } else if (httpRequest3.readyState == 4 && httpRequest3.status == 403) {
+                          document.getElementById("superip").innerHTML = "No";
+                        }
+                };
+                var httpRequest4 = new XMLHttpRequest();
+                httpRequest4.open('GET', "https://api2.hbogoasia.com/v1/geog?lang=undefined&version=0&bundleId=www.hbogoasia.com", true);
+                httpRequest4.send();
+                httpRequest4.onreadystatechange = function () {
+                        if (httpRequest4.readyState == 4 && (httpRequest4.status == 200 || httpRequest4.status ==301)) {
+                            var json = JSON.parse(httpRequest4.responseText);
+                            document.getElementById("hboreg").innerHTML = json.country;
+                        } else if (httpRequest4.readyState == 4 && httpRequest4.status == 403) {
+                          document.getElementById("hboreg").innerHTML = "No";
+                        }
+                };
+                var httpRequest5 = new XMLHttpRequest();
+                httpRequest5.open('GET', "https://uapisfm.tvbanywhere.com.sg/geoip/check/platform/android", true);
+                httpRequest5.send();
+                httpRequest5.onreadystatechange = function () {
+                        if (httpRequest5.readyState == 4 && (httpRequest5.status == 200 || httpRequest5.status ==301)) {
+                            var json = JSON.parse(httpRequest5.responseText);
+                            document.getElementById("tvbip").innerHTML = `<a href="https://ipinfo.io/${json.ip}">${json.ip}</a> (${json.country})`;
+                        } else if (httpRequest5.readyState == 4 && httpRequest5.status == 403) {
+                          document.getElementById("tvbip").innerHTML = "No";
                         }
                 };
             checkstat = setInterval(() => {
