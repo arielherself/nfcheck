@@ -49,6 +49,11 @@
                     <td>General IP</td>
                     <td id="gip"><div><div class="mdui-spinner mdui-spinner-colorful"></div></div>If it takes longer than expected, turn off your adblock plugins.</td>
                   </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Chinese IP</td>
+                    <td id="cip"><div><div class="mdui-spinner mdui-spinner-colorful"></div></div></td>
+                  </tr>
               </tbody>
             </table>
           </div>
@@ -70,7 +75,7 @@
                             var json = httpRequest.responseText;
                             regioncheck = JSON.parse(json);
                             document.getElementById("region").innerHTML = `${regioncheck.client.location.country} (${regioncheck.client.location.city})`;
-                            document.getElementById("ip").innerHTML = `${regioncheck.client.ip} (AS${regioncheck.client.asn} ${regioncheck.client.isp})`;
+                            document.getElementById("ip").innerHTML = `<a href="https://ipinfo.io/${regioncheck.client.ip}">${regioncheck.client.ip}</a> (AS${regioncheck.client.asn} ${regioncheck.client.isp})`;
                         }
                 };
                 var httpRequest1 = new XMLHttpRequest();
@@ -80,7 +85,17 @@
                         if (httpRequest1.readyState == 4 && (httpRequest1.status == 200 || httpRequest1.status ==301)) {
                             var ip = httpRequest1.responseText;
                             var json = JSON.parse(ip);
-                            document.getElementById("gip").innerHTML = `${json.ip}`;
+                            document.getElementById("gip").innerHTML = `<a href="https://ipinfo.io/${json.ip}">${json.ip}</a>`;
+                        }
+                };
+                var httpRequest2 = new XMLHttpRequest();
+                httpRequest2.open('GET', "https://cf-ns.com/cdn-cgi/trace", true);
+                httpRequest2.send();
+                httpRequest2.onreadystatechange = function () {
+                        if (httpRequest2.readyState == 4 && (httpRequest2.status == 200 || httpRequest2.status ==301)) {
+                            var ip = httpRequest2.responseText;
+                            ip = ip.slice(ip.indexOf('ip=')+3, ip.slice(ip.indexOf('ip=')+3).indexOf('\n')+3+ip.indexOf('ip='));
+                            document.getElementById("cip").innerHTML = `<a href="https://ipinfo.io/${ip}">${ip}</a>`;
                         }
                 };
 
